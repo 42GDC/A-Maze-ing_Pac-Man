@@ -34,7 +34,26 @@ enum class Direction : uint8_t {
     West  = 8
 };
 
-#define BLOCKS " ║═╚║║╔╠═╝═╩╗╣╦╬"
+#define BLOCKS  " ║═╚║║╔╠═╝═╩╗╣╦╬"
+#define BLOCKS2 "•╵╶└╷│┌├╴┘─┴┐┤┬┼"
+#define ANSII_RESET   "\033[0m"
+#define ANSII_RED     "\033[31m"
+#define ANSII_GREEN   "\033[32m"
+#define ANSII_YELLOW  "\033[33m"
+#define ANSII_BLUE    "\033[34m"
+#define ANSII_MAGENTA "\033[35m"
+#define ANSII_CYAN    "\033[36m"
+#define ANSII_WHITE   "\033[37m"
+#define ANSII_BG_RED     "\033[41m"
+#define ANSII_BG_GREEN   "\033[42m"
+#define ANSII_BG_YELLOW  "\033[43m"
+#define ANSII_BG_BLUE    "\033[44m"
+#define ANSII_BG_MAGENTA "\033[45m"
+#define ANSII_BG_CYAN    "\033[46m"
+#define ANSII_BG_WHITE   "\033[47m"
+#define ANSII_BOLD      "\033[1m"
+#define ANSII_UNDERLINE "\033[4m"
+
 
 struct Cell {
     bool visited = false;
