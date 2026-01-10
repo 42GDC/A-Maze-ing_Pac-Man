@@ -6,26 +6,17 @@
 #include <cstddef>
 #include <cstdint>
 
-enum class Direction : uint8_t {
-    North = 1,
-    East  = 2,
-    South = 4,
-    West  = 8
-};
-
-struct Cell {
-    bool visited = false;
-    uint8_t connections = 0;  // bitmask for connections: 1 = North, 2 = East, 4 = South, 8 = West
-};
+#include "shared.hpp"
 
 class Maze {
 public:
     Maze() = delete;
-    Maze(uint8_t width, uint8_t height);
+    Maze(uint8_t width, uint8_t height, uint32_t seed);
     ~Maze() = default;
 
     uint8_t width()  const;
     uint8_t height() const;
+    uint32_t seed() const;
 
     Cell& get_cell(uint8_t x, uint8_t y);
 
@@ -33,11 +24,16 @@ public:
 
     bool in_bounds(uint8_t x, uint8_t y) const;
     std::vector<Cell> get_maze() const;
+    std::vector<std::vector<Cell>> share_history() const;
+
+    void generate_maze();
 
 private:
     uint8_t m_width;
     uint8_t m_height;
+    uint32_t m_seed;
     std::vector<Cell> m_maze;
+    std::vector<std::vector<Cell>> m_maze_history;
 };
 
 #endif // MAZE_HPP

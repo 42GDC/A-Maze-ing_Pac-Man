@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-uint32_t colours[5] = {
+uint32_t const COLOURS[5] = {
     0x333333FF, // EMPTY
     0x007F00FF, // PROCESSING
     0x0000FFFF, // PATH
@@ -34,8 +34,16 @@ enum class Direction : uint8_t {
     West  = 8
 };
 
-#define BLOCKS  " ║═╚║║╔╠═╝═╩╗╣╦╬"
-#define BLOCKS2 "•╵╶└╷│┌├╴┘─┴┐┤┬┼"
+enum class Directions : uint8_t {
+    NORTH = 0,
+    EAST  = 1,
+    SOUTH = 2,
+    WEST  = 3
+};
+
+char const * const  BLOCKS1[16] = {" ", "║", "╔", "╠", "═", "╝", "═", "╩", "╗", "╣", "╦", "╬"};
+char const * const  BLOCKS2[16] = {"•", "╵", "╶", "└", "╷", "│", "┌", "├", "╴", "┘", "─", "┴", "┐", "┤", "┬", "┼"};
+
 #define ANSII_RESET   "\033[0m"
 #define ANSII_RED     "\033[31m"
 #define ANSII_GREEN   "\033[32m"
@@ -62,12 +70,6 @@ struct Cell {
     uint8_t connections = 0;  // bitmask for connections: 1 = North, 2 = East, 4 = South, 8 = West
 };
 
-struct Cell {
-    CellType type;
-    bool visited;
-    int x, y;
-
-    Cell(CellType type, int x, int y) : type(type), visited(false), x(x), y(y) {}
-};
+// maze struct
 
 #endif // SHARED_HPP

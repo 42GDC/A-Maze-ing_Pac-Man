@@ -1,0 +1,156 @@
+Input width: Input height: Input seed: Generating maze of size 5x5 with seed 43
+Walking from (3, 3) todos: 25
+At (3, 3)
+Trying direction 0
+Moving North
+At (3, 2)
+Trying direction 0
+Moving North
+At (3, 1)
+Trying direction 3
+Moving West
+At (2, 1)
+Trying direction 1
+At (2, 1)
+Trying direction 1
+At (2, 1)
+Trying direction 2
+Moving South
+At (2, 2)
+Trying direction 0
+At (2, 2)
+Trying direction 3
+Moving West
+At (1, 2)
+Trying direction 1
+At (1, 2)
+Trying direction 3
+Moving West
+At (0, 2)
+Trying direction 3
+At (0, 2)
+Trying direction 2
+Moving South
+At (0, 3)
+Trying direction 2
+Moving South
+At (0, 4)
+Trying direction 2
+At (0, 4)
+Trying direction 3
+At (0, 4)
+Trying direction 0
+At (0, 4)
+Trying direction 3
+At (0, 4)
+Trying direction 3
+At (0, 4)
+Trying direction 2
+At (0, 4)
+Trying direction 3
+At (0, 4)
+Trying direction 3
+At (0, 4)
+Trying direction 1
+Moving East
+At (1, 4)
+Trying direction 1
+Moving East
+At (2, 4)
+Trying direction 3
+At (2, 4)
+Trying direction 2
+At (2, 4)
+Trying direction 3
+At (2, 4)
+Trying direction 2
+At (2, 4)
+Trying direction 3
+At (2, 4)
+Trying direction 1
+Moving East
+At (3, 4)
+Trying direction 0
+At (3, 4)
+Trying direction 0
+At (3, 4)
+Trying direction 0
+At (3, 4)
+Trying direction 1
+Moving East
+At (4, 4)
+Trying direction 0
+Moving North
+At (4, 3)
+Trying direction 0
+Moving North
+At (4, 2)
+Trying direction 0
+Moving North
+At (4, 1)
+Trying direction 3
+At (4, 1)
+Trying direction 0
+Moving North
+At (4, 0)
+Trying direction 2
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 1
+At (4, 0)
+Trying direction 2
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 0
+At (4, 0)
+Trying direction 1
+At (4, 0)
+Trying direction 3
+Moving West
+At (3, 0)
+Trying direction 1
+At (3, 0)
+Trying direction 0
+At (3, 0)
+Trying direction 3
+Moving West
+At (2, 0)
+Trying direction 0
+At (2, 0)
+Trying direction 1
+At (2, 0)
+Trying direction 0
+At (2, 0)
+Trying direction 3
+Moving West
+At (1, 0)
+Trying direction 2
+Moving South
+At (1, 1)
+Trying direction 1
+At (1, 1)
+Trying direction 3
+Moving West
+At (0, 1)
+Trying direction 1
+At (0, 1)
+Trying direction 1
+At (0, 1)
+Trying direction 0
+Moving North
+Hunting...
+╷┌──┐
+└┘┌┐│
+┌─┘││
+│••╵│
+└───┘
