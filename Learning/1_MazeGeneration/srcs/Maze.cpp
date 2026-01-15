@@ -58,8 +58,8 @@ void Maze::generate_maze() {
         std::cout << "Walking from (" << x << ", " << y << ") todos: " << todo << "\n";
         while (walking) {
             std::cout << "At (" << x << ", " << y << ")\n";
-            if (!m_maze[y * m_width + x].visited)
-                todo--;
+            // if (!m_maze[y * m_width + x].visited)
+            //     todo--;
             m_maze[y * m_width + x].visited = true;
             Directions r = static_cast<Directions>(dist(rng));
             std::cout << "Trying direction " << (int)r << "\n";
@@ -69,6 +69,7 @@ void Maze::generate_maze() {
                     m_maze[y * m_width + x].connections |= 1; // North
                     m_maze[(y - 1) * m_width + x].connections |= 4; // South
                     y--;
+                    m_maze_history.push_back(m_maze);
                 }
             }
             else if (r == Directions::EAST ) { // East
@@ -77,6 +78,7 @@ void Maze::generate_maze() {
                     m_maze[y * m_width + x].connections |= 2; // East
                     m_maze[y * m_width + (x + 1)].connections |= 8; // West
                     x++;
+                    m_maze_history.push_back(m_maze);
                 }
             }
             else if (r == Directions::SOUTH) { // South
@@ -85,6 +87,7 @@ void Maze::generate_maze() {
                     m_maze[y * m_width + x].connections |= 4; // South
                     m_maze[(y + 1) * m_width + x].connections |= 1; // North
                     y++;
+                    m_maze_history.push_back(m_maze);
                 }
             }
             else if (r == Directions::WEST) { // West
@@ -93,6 +96,7 @@ void Maze::generate_maze() {
                     m_maze[y * m_width + x].connections |= 8; // West
                     m_maze[y * m_width + (x - 1)].connections |= 2; // East
                     x--;
+                    m_maze_history.push_back(m_maze);
                 }
             }
             if (// no unvisited neighbors
@@ -101,7 +105,12 @@ void Maze::generate_maze() {
                 (y == m_height - 1 || m_maze[(y + 1) * m_width + x].visited) &&
                 (x == 0 || m_maze[y * m_width + (x - 1)].visited)
             )
+            {
+                m_maze[y * m_width + x].visited = true;
                 walking = 0;
+                //todo--;
+                std::cout << "No unvisited neighbors, stopping walk.\n";
+            }
         }
         int hunting = 1;
         //hunt
@@ -135,12 +144,15 @@ void Maze::generate_maze() {
                         if (found) {
                             std::cout << "Found new starting point at (" << (int)xx << ", " << (int)yy << ")\n";
                             // move to that cell
+                            y = yy;
+                            x = xx;
                         }
-                        y = yy;
-                        x = xx;
                     }
                 }
+            }
             hunting = 0;
+            if (!found) {
+               todo = 0; // no unvisited cells found, maze generation complete
             }
         }
         m_maze_history.push_back(m_maze);

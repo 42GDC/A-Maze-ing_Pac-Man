@@ -9,15 +9,32 @@
 #include "Maze.hpp"
 void    visualise_maze(std::vector<std::vector<Cell>>& maze_history, uint8_t width, uint8_t height)
 {
-    
-    std::vector<Cell> maze = maze_history.back();
-    for (uint8_t y = 0; y < height; ++y)
+    while (true)
     {
-        for (uint8_t x = 0; x < width; ++x)
-        {
-            
-            std::cout << BLOCKS2[maze[y * width + x].connections];
+        int n = maze_history.size();
+        std::cout << "Maze slices: " << n << "\nEnter slice number (0 to " << (n - 1) << ") or -1 to exit: ";
+        int temp;
+        if (!(std::cin >> temp)) {  // input validation
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a number.\n";
+            continue ;
         }
-        std::cout << std::endl;
+        if (temp == -1)
+            break ;
+        if (temp < 0 || temp >= n)
+        {
+            std::cout << "Invalid slice number.\n";
+            continue ;
+        }
+        std::vector<Cell> maze = maze_history[temp];
+        for (uint8_t y = 0; y < height; ++y)
+        {
+            for (uint8_t x = 0; x < width; ++x)
+            {
+                std::cout << BLOCKS4[maze[y * width + x].connections];
+            }
+            std::cout << std::endl;
+        }
     }
 }
