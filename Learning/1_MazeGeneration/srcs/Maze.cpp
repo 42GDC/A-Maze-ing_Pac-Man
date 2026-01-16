@@ -55,46 +55,68 @@ void Maze::generate_maze() {
     while (todo > 0) {
         int walking = 1;
         //walk
-        std::cout << "Walking from (" << x << ", " << y << ") todos: " << todo << "\n";
+        if (DEBUG) {
+            std::cout << "Walking from (" << x << ", " << y << ") todos: " << todo << "\n";
+        }
         while (walking) {
-            std::cout << "At (" << x << ", " << y << ")\n";
+            if (DEBUG) {
+                std::cout << "At (" << x << ", " << y << ")\n";
+            }
             // if (!m_maze[y * m_width + x].visited)
             //     todo--;
             m_maze[y * m_width + x].visited = true;
             Directions r = static_cast<Directions>(dist(rng));
-            std::cout << "Trying direction " << (int)r << "\n";
+            if (DEBUG) {
+                std::cout << "Trying direction " << (int)r << "\n";
+            }
             if (r == Directions::NORTH) { // North
                 if (y > 0 && !m_maze[(y - 1) * m_width + x].visited) {
-                    std::cout << "Moving North\n";
+                    if (DEBUG) {
+                        std::cout << "Moving North\n";
+                    }
                     m_maze[y * m_width + x].connections |= 1; // North
                     m_maze[(y - 1) * m_width + x].connections |= 4; // South
+                    m_maze[y * m_width + x].connectionNumber += 1; // North
+                    m_maze[(y - 1) * m_width + x].connectionNumber += 1; // South
                     y--;
                     m_maze_history.push_back(m_maze);
                 }
             }
             else if (r == Directions::EAST ) { // East
                 if (x < m_width - 1 && !m_maze[y * m_width + (x + 1)].visited) {
-                    std::cout << "Moving East\n";
+                    if (DEBUG) {
+                        std::cout << "Moving East\n";
+                    }
                     m_maze[y * m_width + x].connections |= 2; // East
                     m_maze[y * m_width + (x + 1)].connections |= 8; // West
+                    m_maze[y * m_width + x].connectionNumber += 1; // East
+                    m_maze[y * m_width + (x + 1)].connectionNumber += 1; // West    
                     x++;
                     m_maze_history.push_back(m_maze);
                 }
             }
             else if (r == Directions::SOUTH) { // South
                 if (y < m_height - 1 && !m_maze[(y + 1) * m_width + x].visited) {
-                    std::cout << "Moving South\n";
+                    if (DEBUG) {
+                        std::cout << "Moving South\n";
+                    }
                     m_maze[y * m_width + x].connections |= 4; // South
                     m_maze[(y + 1) * m_width + x].connections |= 1; // North
+                    m_maze[y * m_width + x].connectionNumber += 1; // South
+                    m_maze[(y + 1) * m_width + x].connectionNumber += 1; // North
                     y++;
                     m_maze_history.push_back(m_maze);
                 }
             }
             else if (r == Directions::WEST) { // West
                 if (x > 0 && !m_maze[y * m_width + (x - 1)].visited) {
-                    std::cout << "Moving West\n";
+                    if (DEBUG) {
+                        std::cout << "Moving West\n";
+                    }
                     m_maze[y * m_width + x].connections |= 8; // West
                     m_maze[y * m_width + (x - 1)].connections |= 2; // East
+                    m_maze[y * m_width + x].connectionNumber += 1; // West
+                    m_maze[y * m_width + (x - 1)].connectionNumber += 1; // East
                     x--;
                     m_maze_history.push_back(m_maze);
                 }
@@ -109,13 +131,17 @@ void Maze::generate_maze() {
                 m_maze[y * m_width + x].visited = true;
                 walking = 0;
                 //todo--;
-                std::cout << "No unvisited neighbors, stopping walk.\n";
+                if (DEBUG) {
+                    std::cout << "No unvisited neighbors, stopping walk.\n";
+                }
             }
         }
         int hunting = 1;
         //hunt
         while (hunting) {
-            std::cout << "Hunting...\n";
+            if (DEBUG) {
+                std::cout << "Hunting...\n";
+            }
             bool found = false;
             for (uint8_t yy = 0U; !found && yy < m_height; ++yy) {
                 for (uint8_t xx = 0U; !found && xx < m_width; ++xx) {
@@ -124,25 +150,35 @@ void Maze::generate_maze() {
                         if (yy > 0 && m_maze[(yy - 1) * m_width + xx].visited) { // North
                             m_maze[yy * m_width + xx].connections |= 1; // North
                             m_maze[(yy - 1) * m_width + xx].connections |= 4; // South
+                            m_maze[yy * m_width + xx].connectionNumber += 1; // North
+                            m_maze[(yy - 1) * m_width + xx].connectionNumber += 1; // South
                             found = true;  
                         }
                         else if (xx < m_width - 1 && m_maze[yy * m_width + (xx + 1)].visited) { // East
                             m_maze[yy * m_width + xx].connections |= 2; // East
                             m_maze[yy * m_width + (xx + 1)].connections |= 8; // West
+                            m_maze[yy * m_width + xx].connectionNumber += 1; // East
+                            m_maze[yy * m_width + (xx + 1)].connectionNumber += 1; // West
                             found = true;
                         }
                         else if (yy < m_height - 1 && m_maze[(yy + 1) * m_width + xx].visited) { // South
                             m_maze[yy * m_width + xx].connections |= 4; // South
                             m_maze[(yy + 1) * m_width + xx].connections |= 1; // North
+                            m_maze[yy * m_width + xx].connectionNumber += 1; // South
+                            m_maze[(yy + 1) * m_width + xx].connectionNumber += 1; // North 
                             found = true;
                         }
                         else if (xx > 0 && m_maze[yy * m_width + (xx - 1)].visited) { // West
                             m_maze[yy * m_width + xx].connections |= 8; // West
                             m_maze[yy * m_width + (xx - 1)].connections |= 2; // East
+                            m_maze[yy * m_width + xx].connectionNumber += 1; // West
+                            m_maze[yy * m_width + (xx - 1)].connectionNumber += 1; // East
                             found = true;
                         }
                         if (found) {
-                            std::cout << "Found new starting point at (" << (int)xx << ", " << (int)yy << ")\n";
+                            if (DEBUG) {
+                                std::cout << "Found new starting point at (" << (int)xx << ", " << (int)yy << ")\n";
+                            }
                             // move to that cell
                             y = yy;
                             x = xx;

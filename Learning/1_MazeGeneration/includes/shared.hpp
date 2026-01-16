@@ -41,9 +41,9 @@ enum class Directions : uint8_t {
     WEST  = 3
 };
 
-char const * const  BLOCKS1[16] = {" ", "║", "═", "╚", "╠", "═", "╔", "╠", "═", "╝", "═", "╩", "╗", "╣", "╦", "╬"};
+char const * const  BLOCKS1[16] = {" ", "║", "═", "╚", "║", "║", "╔", "╠", "═", "╝", "═", "╩", "╗", "╣", "╦", "╬"};
 char const * const  BLOCKS2[16] = {"•", "╵", "╶", "└", "╷", "│", "┌", "├", "╴", "┘", "─", "┴", "┐", "┤", "┬", "┼"};
-char const * const  BLOCKS3[16] = {"  ", "║ ", "══", "╚═", "╠═", "══", "╔═", "╠═", "══", "╝ ", "══", "╩═", "╗ ", "╣ ", "╦═", "╬═"};
+char const * const  BLOCKS3[16] = {"  ", "║ ", "══", "╚═", "║ ", "║ ", "╔═", "╠═", "═ ", "╝ ", "══", "╩═", "╗ ", "╣ ", "╦═", "╬═"};
 char const * const  BLOCKS4[16] = {"• ", "╵ ", "╶─", "└─", "╷ ", "│ ", "┌─", "├─", "╴ ", "┘ ", "──", "┴─", "┐ ", "┤ ", "┬─", "┼─"};
 
 #define ANSII_RESET   "\033[0m"
@@ -54,6 +54,7 @@ char const * const  BLOCKS4[16] = {"• ", "╵ ", "╶─", "└─", "╷ ", "
 #define ANSII_MAGENTA "\033[35m"
 #define ANSII_CYAN    "\033[36m"
 #define ANSII_WHITE   "\033[37m"
+#define ANSII_BLACK   "\033[30m"
 #define ANSII_BG_RED     "\033[41m"
 #define ANSII_BG_GREEN   "\033[42m"
 #define ANSII_BG_YELLOW  "\033[43m"
@@ -61,8 +62,18 @@ char const * const  BLOCKS4[16] = {"• ", "╵ ", "╶─", "└─", "╷ ", "
 #define ANSII_BG_MAGENTA "\033[45m"
 #define ANSII_BG_CYAN    "\033[46m"
 #define ANSII_BG_WHITE   "\033[47m"
+#define ANSII_BG_BLACK   "\033[40m"
 #define ANSII_BOLD      "\033[1m"
 #define ANSII_UNDERLINE "\033[4m"
+
+#define ANSII_ENTER_ALTERNATE_SCREEN "\033[?1049h"
+#define ANSII_EXIT_ALTERNATE_SCREEN  "\033[?1049l"
+
+#define ANSI_CLEAR_SCREEN "\033[2J"
+#define ANSI_CURSOR_HOME  "\033[H"
+
+
+#define DEBUG 0 // set to 1 to enable debug output
 
 
 struct Cell {
