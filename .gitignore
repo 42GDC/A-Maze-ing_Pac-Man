@@ -40,3 +40,4 @@
 # debug information files
 *.dwo
 .DS_Store
+Learning/1_MazeGeneration/maze_generator
