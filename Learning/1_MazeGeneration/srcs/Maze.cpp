@@ -69,6 +69,8 @@ void Maze::generate_maze() {
             if (DEBUG) {
                 std::cout << "Trying direction " << (int)r << "\n";
             }
+            // OPTIMISATION1: ABSTRACT JOINING NEIGHBOURS TO A FUNCTION
+            // OPTIMISATION2: CHECK NUMBER OF NEIGHBOURS AND RANDOMLY JOIN ONE OF THEM
             if (r == Directions::NORTH) { // North
                 if (y > 0 && !m_maze[(y - 1) * m_width + x].visited) {
                     if (DEBUG) {
@@ -143,10 +145,12 @@ void Maze::generate_maze() {
                 std::cout << "Hunting...\n";
             }
             bool found = false;
+            // could use just one loop since maze is stored linearly
             for (uint8_t yy = 0U; !found && yy < m_height; ++yy) {
                 for (uint8_t xx = 0U; !found && xx < m_width; ++xx) {
                     if (!m_maze[yy * m_width + xx].visited) { // unvisited cell found
                         // check for visited neighbors
+                        // SHOULD JOIN RANDOMLY ANY NEIGHBOUR THAT IS VISITED
                         if (yy > 0 && m_maze[(yy - 1) * m_width + xx].visited) { // North
                             m_maze[yy * m_width + xx].connections |= 1; // North
                             m_maze[(yy - 1) * m_width + xx].connections |= 4; // South
@@ -194,6 +198,5 @@ void Maze::generate_maze() {
         m_maze_history.push_back(m_maze);
     }
     // Final state
-
     m_maze_history.push_back(m_maze);
 }
