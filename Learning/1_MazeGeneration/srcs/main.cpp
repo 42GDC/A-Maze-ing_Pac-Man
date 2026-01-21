@@ -1,33 +1,42 @@
 #include <cstdint>
 #include <iostream>
 #include "shared.hpp"
-#include "Maze.hpp"
+#include "MazeGenerator.hpp"
 
 void    visualise_maze(std::vector<std::vector<Cell>>& maze_history, uint8_t width, uint8_t height);
+void    visualise_maze2(std::vector<Maze>& maze_history);
 
-int	main(void)
+
+// add options to add seed, width, height, algorithm
+int	main(int argc, char* argv[])
 {
-	uint8_t		height;
-	uint8_t		width;
+	uint16_t	height;
+	uint16_t	width;
 	uint32_t	seed;
 	int			temp;
 
-	std::cout << "Input width: ";
-	std::cin >> temp;
-	width = static_cast<uint8_t>(temp);
-	std::cout << "Input height: ";
-	std::cin >> temp;
-	height = static_cast<uint8_t>(temp);
-	std::cout << "Input seed: ";
-	std::cin >> seed;
+	if (argc == 4)
+	{
+		width = static_cast<uint16_t>(std::stoi(argv[1]));
+		height = static_cast<uint16_t>(std::stoi(argv[2]));
+		seed = static_cast<uint32_t>(std::stoul(argv[3]));
+	}
+	else
+	{
+		std::cout << "Usage: " << argv[0] << " <width> <height> <seed>\n";
+		std::cout << "Or run without arguments to input manually.\n";
+	}
+
 	// std::cout << std::endl;
 	std::cout << "Generating maze of size " << (int)width << "x" << (int)height << " with seed " << seed << std::endl;
 
-	Maze		maze(width, height, seed);
+	MazeGenerator		mg(width, height, seed);
 
-	maze.generate_maze();
-	std::vector<std::vector<Cell>> maze_history = maze.share_history();
+	mg.generate_maze();
+	std::vector<std::vector<Cell>> maze_history = mg.share_history();
 	visualise_maze(maze_history, width, height);
+	std::vector<Maze> maze2_history = mg.share_maze2_history();
+	visualise_maze2(maze2_history);
 	// generate maze
 	// remove dead ends
 	// increase connectivity (add loops)

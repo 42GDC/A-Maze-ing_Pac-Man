@@ -4,47 +4,52 @@
 #include <cstdint>
 #include <random>
 #include <iostream>
-#include "Maze.hpp" 
+#include "MazeGenerator.hpp" 
 
 
 
-Maze::Maze(uint8_t width, uint8_t height, uint32_t seed) {
+MazeGenerator::MazeGenerator(uint8_t width, uint8_t height, uint32_t seed) : m_maze2(width, height) {
     m_width = width;
     m_height = height;
     m_seed = seed; // set seed separately
     m_maze.resize(width * height);
     m_maze_history.push_back(m_maze);
+    m_maze2_history.push_back(m_maze2);
 }
 
-uint8_t Maze::width()  const { return m_width; }
-uint8_t Maze::height() const { return m_height; }
-uint32_t Maze::seed() const { return m_seed; }
+uint8_t MazeGenerator::width()  const { return m_width; }
+uint8_t MazeGenerator::height() const { return m_height; }
+uint32_t MazeGenerator::seed() const { return m_seed; }
 
-Cell& Maze::get_cell(uint8_t x, uint8_t y) {
+Cell& MazeGenerator::get_cell(uint8_t x, uint8_t y) {
     return m_maze[y * m_width + x];
 }
 
-const Cell& Maze::get_cell(uint8_t x, uint8_t y) const {
+const Cell& MazeGenerator::get_cell(uint8_t x, uint8_t y) const {
     return m_maze[y * m_width + x];
 }
 
-bool Maze::in_bounds(uint8_t x, uint8_t y) const {
+bool MazeGenerator::in_bounds(uint8_t x, uint8_t y) const {
     return x < m_width && y < m_height;
 }
 
-std::vector<Cell> Maze::get_maze() const {
+std::vector<Cell> MazeGenerator::get_maze() const {
     return m_maze;
 }
 
-std::vector<std::vector<Cell>> Maze::share_history() const {
+std::vector<std::vector<Cell>> MazeGenerator::share_history() const {
     return m_maze_history;
 }
 
-void Maze::generate_maze() {
+std::vector<Maze> MazeGenerator::share_maze2_history() const {
+    return m_maze2_history;
+}
+
+void MazeGenerator::generate_maze() {
     // hunt and kill algorithm implementation
     // walk phase
     // hunt phase
-    // at each step, update m_maze_history  
+    // at each step, update m_maze_history
     int todo = m_height * m_width;
     // ... maze generation logic here ...
     // After each significant step in the algorithm, store the current maze state
@@ -65,6 +70,7 @@ void Maze::generate_maze() {
             // if (!m_maze[y * m_width + x].visited)
             //     todo--;
             m_maze[y * m_width + x].visited = true;
+            m_maze2.get_cell(x, y).visited = true;
             Directions r = static_cast<Directions>(dist(rng));
             if (DEBUG) {
                 std::cout << "Trying direction " << (int)r << "\n";
@@ -72,7 +78,7 @@ void Maze::generate_maze() {
             // OPTIMISATION1: ABSTRACT JOINING NEIGHBOURS TO A FUNCTION
             // OPTIMISATION2: CHECK NUMBER OF NEIGHBOURS AND RANDOMLY JOIN ONE OF THEM
             if (r == Directions::NORTH) { // North
-                if (y > 0 && !m_maze[(y - 1) * m_width + x].visited) {
+                if (y > 0 && !m_maze[(y - 1) * m_width + x].visited) { // 
                     if (DEBUG) {
                         std::cout << "Moving North\n";
                     }
@@ -80,8 +86,10 @@ void Maze::generate_maze() {
                     m_maze[(y - 1) * m_width + x].connections |= 4; // South
                     m_maze[y * m_width + x].connectionNumber += 1; // North
                     m_maze[(y - 1) * m_width + x].connectionNumber += 1; // South
+                    m_maze2.connectNorth(x, y);
                     y--;
                     m_maze_history.push_back(m_maze);
+                    m_maze2_history.push_back(m_maze2);
                 }
             }
             else if (r == Directions::EAST ) { // East
@@ -93,8 +101,10 @@ void Maze::generate_maze() {
                     m_maze[y * m_width + (x + 1)].connections |= 8; // West
                     m_maze[y * m_width + x].connectionNumber += 1; // East
                     m_maze[y * m_width + (x + 1)].connectionNumber += 1; // West    
+                    m_maze2.connectEast(x, y);
                     x++;
                     m_maze_history.push_back(m_maze);
+                    m_maze2_history.push_back(m_maze2);
                 }
             }
             else if (r == Directions::SOUTH) { // South
@@ -106,8 +116,10 @@ void Maze::generate_maze() {
                     m_maze[(y + 1) * m_width + x].connections |= 1; // North
                     m_maze[y * m_width + x].connectionNumber += 1; // South
                     m_maze[(y + 1) * m_width + x].connectionNumber += 1; // North
+                    m_maze2.connectSouth(x, y);
                     y++;
                     m_maze_history.push_back(m_maze);
+                    m_maze2_history.push_back(m_maze2);
                 }
             }
             else if (r == Directions::WEST) { // West
@@ -119,8 +131,10 @@ void Maze::generate_maze() {
                     m_maze[y * m_width + (x - 1)].connections |= 2; // East
                     m_maze[y * m_width + x].connectionNumber += 1; // West
                     m_maze[y * m_width + (x - 1)].connectionNumber += 1; // East
+                    m_maze2.connectWest(x, y);
                     x--;
                     m_maze_history.push_back(m_maze);
+                    m_maze2_history.push_back(m_maze2);
                 }
             }
             if (// no unvisited neighbors
@@ -131,6 +145,7 @@ void Maze::generate_maze() {
             )
             {
                 m_maze[y * m_width + x].visited = true;
+                m_maze2.get_cell(x, y).visited = true;
                 walking = 0;
                 //todo--;
                 if (DEBUG) {
@@ -156,6 +171,7 @@ void Maze::generate_maze() {
                             m_maze[(yy - 1) * m_width + xx].connections |= 4; // South
                             m_maze[yy * m_width + xx].connectionNumber += 1; // North
                             m_maze[(yy - 1) * m_width + xx].connectionNumber += 1; // South
+                            m_maze2.connectNorth(xx, yy);
                             found = true;  
                         }
                         else if (xx < m_width - 1 && m_maze[yy * m_width + (xx + 1)].visited) { // East
@@ -163,13 +179,15 @@ void Maze::generate_maze() {
                             m_maze[yy * m_width + (xx + 1)].connections |= 8; // West
                             m_maze[yy * m_width + xx].connectionNumber += 1; // East
                             m_maze[yy * m_width + (xx + 1)].connectionNumber += 1; // West
+                            m_maze2.connectEast(xx, yy);
                             found = true;
                         }
                         else if (yy < m_height - 1 && m_maze[(yy + 1) * m_width + xx].visited) { // South
                             m_maze[yy * m_width + xx].connections |= 4; // South
                             m_maze[(yy + 1) * m_width + xx].connections |= 1; // North
                             m_maze[yy * m_width + xx].connectionNumber += 1; // South
-                            m_maze[(yy + 1) * m_width + xx].connectionNumber += 1; // North 
+                            m_maze[(yy + 1) * m_width + xx].connectionNumber += 1; // North
+                            m_maze2.connectSouth(xx, yy);
                             found = true;
                         }
                         else if (xx > 0 && m_maze[yy * m_width + (xx - 1)].visited) { // West
@@ -177,6 +195,7 @@ void Maze::generate_maze() {
                             m_maze[yy * m_width + (xx - 1)].connections |= 2; // East
                             m_maze[yy * m_width + xx].connectionNumber += 1; // West
                             m_maze[yy * m_width + (xx - 1)].connectionNumber += 1; // East
+                            m_maze2.connectWest(xx, yy);
                             found = true;
                         }
                         if (found) {
@@ -196,7 +215,9 @@ void Maze::generate_maze() {
             }
         }
         m_maze_history.push_back(m_maze);
+        m_maze2_history.push_back(m_maze2);
     }
     // Final state
     m_maze_history.push_back(m_maze);
+    m_maze2_history.push_back(m_maze2);
 }

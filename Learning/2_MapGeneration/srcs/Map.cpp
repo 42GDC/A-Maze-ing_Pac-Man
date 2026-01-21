@@ -20,6 +20,16 @@ struct Cell {
     uint8_t walls;  // bitmask for walls: 1 = North, 2 = East, 4 = South, 8 = West
 };
 
+// Map gets maze
+// map width = maze width * 2 + 1
+// map height = maze height * 2 + 1
+
+
+// map flip vertically (Maybe add to maze generation step?)
+// map flip horizontally (Maybe add to maze generation step?)
+// add ghost area (Maybe add to maze generation step?)
+// add portals
+
 class Map {
 public:
     Map(uint8_t width, uint8_t height)

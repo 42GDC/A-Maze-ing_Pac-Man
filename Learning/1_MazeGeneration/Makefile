@@ -1,4 +1,4 @@
-SOURCES = srcs/main.cpp srcs/Maze.cpp srcs/Visualiser.cpp
+SOURCES = srcs/main.cpp srcs/MazeGenerator.cpp srcs/Visualiser.cpp
 HEADERS = includes/shared.hpp
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror

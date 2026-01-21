@@ -84,5 +84,79 @@ struct Cell {
 };
 
 // maze struct
+// maybe should be class?
+class Maze {
+public:
+    Maze() = delete;
+    Maze(const Maze&) = default;
+    Maze& operator=(const Maze&) = delete;
+    Maze(Maze&&) = default;
+    Maze& operator=(Maze&&) = delete;
+    Maze(uint16_t width, uint16_t height) : width(width), height(height), cells(width * height) {};
+    ~Maze() = default;
+
+    uint16_t get_width() const { return width; }
+    uint16_t get_height() const { return height; }
+    std::vector<Cell> get_cells() const { return cells; }
+    bool connectEast(uint16_t x, uint16_t y) {
+        if (x < width - 1) {
+            if (cells[y * width + x].connections & 2) {
+                return false; // Already connected East
+            }
+            cells[y * width + x].connections |= 2;     // Connect East
+            cells[y * width + x].connectionNumber += 1;
+            cells[y * width + (x + 1)].connections |= 8; // Connect West
+            cells[y * width + (x + 1)].connectionNumber += 1;
+            return true;
+        }
+        return false;
+    }
+    bool connectWest(uint16_t x, uint16_t y) {
+        if (x > 0) {
+            if (cells[y * width + x].connections & 8) {
+                return false; // Already connected West
+            }
+            cells[y * width + x].connections |= 8;     // Connect West
+            cells[y * width + x].connectionNumber += 1;
+            cells[y * width + (x - 1)].connections |= 2; // Connect East
+            cells[y * width + (x - 1)].connectionNumber += 1;
+            return true;
+        }
+        return false;
+    }
+    bool connectNorth(uint16_t x, uint16_t y) {
+        if (y > 0) {
+            if (cells[y * width + x].connections & 1) {
+                return false; // Already connected North
+            }
+            cells[y * width + x].connections |= 1;     // Connect North
+            cells[y * width + x].connectionNumber += 1;
+            cells[(y - 1) * width + x].connections |= 4; // Connect South
+            cells[(y - 1) * width + x].connectionNumber +=  1;
+            return true;
+        }
+        return false;
+    }
+    bool connectSouth(uint16_t x, uint16_t y) {
+        if (y < height - 1) {
+            if (cells[y * width + x].connections & 4) {
+                return false; // Already connected South
+            }
+            cells[y * width + x].connections |= 4;     // Connect South
+            cells[y * width + x].connectionNumber += 1;
+            cells[(y + 1) * width + x].connections |= 1; // Connect North
+            cells[(y + 1) * width + x].connectionNumber += 1;
+            return true;
+        }
+        return false;
+    }
+    Cell& get_cell(uint16_t x, uint16_t y) { return cells[y * width + x]; }
+    const Cell& get_cell(uint16_t x, uint16_t y) const { return cells[y * width + x]; }
+
+private:
+    uint16_t width;
+    uint16_t height;
+    std::vector<Cell> cells;
+};
 
 #endif // SHARED_HPP
