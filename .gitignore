@@ -42,8 +42,6 @@
 
 #custom
 build
+bin
 .*
-maze_generator
-map_generator
-graphic_map
 pacman_game
