@@ -2,4 +2,5 @@
 
 void SDLRenderer::clear(){}
 void SDLRenderer::present(){}
-void SDLRenderer::drawMap(const Map&){}
+void SDLRenderer::drawTile(int, int, char){}
+void SDLRenderer::drawText(const std::string&){}

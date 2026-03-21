@@ -1,11 +1,13 @@
 #include "engine/Engine.hpp"
-#include "games/pacman/PacmanGame.hpp"
-#include <memory>
+#include "render/TerminalRenderer.hpp"
+#include "games/pacman/states/PacmanMenuState.hpp"
 
-int main()
-{
-    Engine engine;
+int main() {
+    TerminalRenderer renderer;
+    Engine engine(renderer);
 
-    engine.setGame(std::make_unique<PacmanGame>());
+    engine.setState(std::make_unique<PacmanMenuState>(engine));
     engine.run();
+
+    return 0;
 }

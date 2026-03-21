@@ -7,5 +7,6 @@ class SDLRenderer : public IRenderer
 public:
     void clear() override;
     void present() override;
-    void drawMap(const Map&) override;
+    void drawTile(int x, int y, char c) override;
+    void drawText(const std::string& text) override;
 };

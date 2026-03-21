@@ -10,6 +10,7 @@
 class Map
 {
 public:
+    Map() = default;
     Map(std::uint32_t w, std::uint32_t h);
 
     TileType get(std::uint32_t x, std::uint32_t y) const;

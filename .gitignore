@@ -40,8 +40,12 @@
 # debug information files
 *.dwo
 
-#custom
+# custom
 build
 bin
 .*
 pacman_game
+
+# tmp
+music
+sounds

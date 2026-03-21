@@ -1,13 +1,14 @@
 #pragma once
 
-class Map;
+#include <string>
 
-class IRenderer
-{
+class IRenderer {
 public:
-    virtual ~IRenderer(){}
+    virtual ~IRenderer() = default;
 
     virtual void clear() = 0;
     virtual void present() = 0;
-    virtual void drawMap(const Map&) = 0;
+
+    virtual void drawTile(int x, int y, char c) = 0;
+    virtual void drawText(const std::string& text) = 0;
 };

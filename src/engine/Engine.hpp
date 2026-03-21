@@ -1,14 +1,22 @@
 #pragma once
 
 #include <memory>
-#include "games/Game.hpp"
+#include "IGameState.hpp"
+#include "render/IRenderer.hpp"
 
-class Engine
-{
+class Engine {
 public:
-    void setGame(std::unique_ptr<Game> game);
+    Engine(IRenderer& renderer);
+
+    void setState(std::unique_ptr<IGameState> newState);
     void run();
+    void stop();
+
+    IRenderer& getRenderer();
 
 private:
-    std::unique_ptr<Game> currentGame;
+    std::unique_ptr<IGameState> currentState;
+    IRenderer& renderer;
+
+    bool running = true;
 };

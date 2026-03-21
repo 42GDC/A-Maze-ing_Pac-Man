@@ -1,16 +1,31 @@
 #pragma once
 
-#include "games/Game.hpp"
+#include <vector>
 #include "map/Map.hpp"
-#include "maze/Maze.hpp"
+#include "input/Input.hpp"
+#include "render/IRenderer.hpp"
+#include "PacmanEvent.hpp"
 
-class PacmanGame : public Game
-{
+struct Vec2 {
+    int x;
+    int y;
+};
+
+class PacmanGame {
 public:
-    void init() override;
-    void update() override;
-    void render() override;
+    Map map;
+
+    Vec2 playerPos{};
+    int score = 0;
+
+    std::vector<PacmanEvent> events;
+
+    void init(const std::string& mapPath);
+
+    void handleInput(InputKey input);
+    void update(double dt);
+    void render(IRenderer& renderer);
 
 private:
-    Map map{0U, 0U};
+    void movePlayer(int dx, int dy);
 };
