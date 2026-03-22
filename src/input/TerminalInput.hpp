@@ -1,5 +1,5 @@
 #pragma once
-#include "Input.hpp"
+#include "InputKey.hpp"
 
 class TerminalInput {
 public:

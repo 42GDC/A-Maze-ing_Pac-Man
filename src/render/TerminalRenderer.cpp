@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <iostream>
 #include "TerminalRenderer.hpp"
-#include "map/Map.hpp"
 
 void TerminalRenderer::clear(){
     std::cout << "\033[2J\033[H"; // Clear screen and move cursor to home

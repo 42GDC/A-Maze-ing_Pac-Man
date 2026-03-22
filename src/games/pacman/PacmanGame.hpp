@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "map/Map.hpp"
-#include "input/Input.hpp"
+#include "input/InputKey.hpp"
 #include "render/IRenderer.hpp"
 #include "PacmanEvent.hpp"
 

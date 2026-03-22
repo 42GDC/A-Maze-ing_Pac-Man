@@ -2,6 +2,8 @@
 #include <chrono>
 #include "Engine.hpp"
 #include "input/TerminalInput.hpp"
+#include "input/SDLInput.hpp"
+
 
 Engine::Engine(IRenderer& renderer)
     : renderer(renderer) {}
@@ -15,7 +17,7 @@ IRenderer& Engine::getRenderer() {
 }
 
 void Engine::run() {
-    TerminalInput input;
+    SDLInput input;
 
     while (running) {
         InputKey key = input.pollInput();
@@ -27,7 +29,7 @@ void Engine::run() {
             renderer.clear();
             currentState->render(renderer);
             renderer.present();
-            std::this_thread::sleep_for(std::chrono::milliseconds(200)); // ~5 FPS
+            std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ~60 FPS
         }
     }
 }

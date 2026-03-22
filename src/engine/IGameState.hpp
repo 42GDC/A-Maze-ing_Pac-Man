@@ -1,5 +1,5 @@
 #pragma once
-#include "input/Input.hpp"
+#include "input/InputKey.hpp"
 #include "render/IRenderer.hpp"
 
 class IGameState {

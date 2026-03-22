@@ -39,7 +39,7 @@
   
 - **Map**
   - Maze generation & storage
-  - Map loading from file
+  - Map loading from file ✅
   - 2D array or tile-based representation
   - Tile properties: wall, path, food, spawn points
   - Map history buffer for visualization/debugging
