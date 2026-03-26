@@ -2,6 +2,8 @@
 #include "map/MapEditor.hpp"
 #include "render/IRenderer.hpp"
 
+#include <iostream>
+
 void PacmanGame::init(const std::string& mapPath) {
     MapEditor editor(map);
     editor.buildFromPath(mapPath);
@@ -10,7 +12,7 @@ void PacmanGame::init(const std::string& mapPath) {
     for (uint32_t y = 0; y < map.height(); y++) {
         for (uint32_t x = 0; x < map.width(); x++) {
             if (map.get(x, y) == TileType::PlayerSpawn) { // TODO: rename to getTile
-                playerPos = {(int)x, (int)y};
+                playerPos = {(int)x * tileSize, (int)y * tileSize};
             }
         }
     }
@@ -20,31 +22,70 @@ void PacmanGame::init(const std::string& mapPath) {
 
 void PacmanGame::handleInput(InputKey input) {
     switch (input) {
-        case InputKey::UP: movePlayer(0, -1); break;
-        case InputKey::DOWN: movePlayer(0, 1); break;
-        case InputKey::LEFT: movePlayer(-1, 0); break;
-        case InputKey::RIGHT: movePlayer(1, 0); break;
+        case InputKey::UP: playerNextDir = 3; break;
+        case InputKey::DOWN: playerNextDir = 1; break;
+        case InputKey::LEFT: playerNextDir = 2; break;
+        case InputKey::RIGHT: playerNextDir = 0; break;
         default: break;
     }
 }
 
-void PacmanGame::movePlayer(int dx, int dy) {
-    int nx = playerPos.x + dx;
-    int ny = playerPos.y + dy;
+void PacmanGame::movePlayer(void) {
+    int dx = 0;
+    int dy = 0;
+    // std::cout << "Handling player movement..." << std::endl;
+    // std::cout << "Player direction: " << playerDir << ", next direction: " << playerNextDir << std::endl;
+    // std::cout << "Player position: (" << playerPos.x << ", " << playerPos.y << ")" << std::endl;
 
-    if (map.get(nx, ny) == TileType::Wall)
-        return;
-
-    playerPos = {nx, ny};
-    events.push_back(PacmanEvent::PLAYER_MOVED);
-
-    if (map.get(nx, ny) == TileType::Pellet) {
-        score += 10;
-        events.push_back(PacmanEvent::PELLET_EATEN);
+    switch (playerDir) {
+        case 0: dx = playerSpeed; break; // right
+        case 1: dy = playerSpeed; break; // down
+        case 2: dx = -playerSpeed; break; // left
+        case 3: dy = -playerSpeed; break; // up
     }
+    //try to move in old direction
+    int nx = playerPos.x + tileSize * dx / playerSpeed;
+    int ny = playerPos.y + tileSize * dy / playerSpeed;
+    //check if new tile is not wall
+    if (playerPos.x % tileSize || playerPos.y % tileSize || map.get(nx / tileSize, ny / tileSize) != TileType::Wall) {
+        if (map.get(nx / tileSize, ny / tileSize) == TileType::Pellet && playerPos.x % tileSize == 0 && playerPos.y % tileSize == 0) {
+            score += 10;
+            events.push_back(PacmanEvent::PELLET_EATEN);
+            map.set(nx / tileSize, ny / tileSize, TileType::Empty);
+        }
+        playerPos.x += dx;
+        playerPos.y += dy;
+        events.push_back(PacmanEvent::PLAYER_MOVED);
+    }
+
+    dx = 0;
+    dy = 0;
+    // try to move in new direction if possible
+    switch (playerNextDir) {
+        case 0: dx = playerSpeed; break; // right
+        case 1: dy = playerSpeed; break; // down
+        case 2: dx = -playerSpeed; break; // left
+        case 3: dy = -playerSpeed; break; // up
+    }
+    nx = playerPos.x + tileSize * dx / playerSpeed;
+    ny = playerPos.y + tileSize * dy / playerSpeed;
+    // std::cout << "Trying to change direction to " << playerNextDir << "..." << std::endl;
+    // std::cout << "Tile position in new direction: (" << nx << ", " << ny << ")" << std::endl;
+    // std::cout << "Next tile in new direction: (" << nx / tileSize << ", " << ny / tileSize << ") - " << (int)map.get(nx / tileSize, ny / tileSize) << std::endl;
+    // std::cout << "Player position mod tileSize: (" << playerPos.x % tileSize << ", " << playerPos.y % tileSize << ")" << std::endl;
+    if (map.get(nx / tileSize, ny / tileSize) != TileType::Wall && playerPos.x % tileSize == 0 && playerPos.y % tileSize == 0) {
+        playerDir = playerNextDir;
+    }
+    
+    // std::cout << "After handling player movement..." << std::endl;
+    // std::cout << "Player direction: " << playerDir << ", next direction: " << playerNextDir << std::endl;
+    // std::cout << "Player position: (" << playerPos.x << ", " << playerPos.y << ")" << std::endl;
 }
 
-void PacmanGame::update(double) {}
+void PacmanGame::update(double) {
+    movePlayer();
+    // push events?
+}
 
 void PacmanGame::render(IRenderer& renderer) {
     for (uint32_t y = 0; y < map.height(); y++) {
@@ -56,11 +97,8 @@ void PacmanGame::render(IRenderer& renderer) {
                 case TileType::Pellet: c = '.'; break;
                 default: break;
             }
-
-            if (playerPos.x == (int)x && playerPos.y == (int)y)
-                c = 'P';
-
-            renderer.drawTile(x, y, c);
+            renderer.drawTile(x * tileSize, y * tileSize, c);
         }
     }
+    renderer.drawTile(playerPos.x, playerPos.y, 'P');
 }

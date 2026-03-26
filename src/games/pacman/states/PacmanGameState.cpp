@@ -17,6 +17,10 @@ void PacmanGameState::handleInput(InputKey input) {
 
 void PacmanGameState::update(double dt) {
     game.update(dt);
+    for (auto event : game.events) {
+        engine.getAudio().playEvent(event);
+    }
+    game.events.clear();
 }
 
 void PacmanGameState::render(IRenderer& renderer) {

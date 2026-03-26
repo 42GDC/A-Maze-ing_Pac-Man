@@ -23,6 +23,7 @@ SDL_SRC_DIR = .sdl_src
 
 SRC = \
 $(SRC_DIR)/main.cpp \
+$(SRC_DIR)/audio/SDLAudio.cpp \
 $(SRC_DIR)/input/TerminalInput.cpp \
 $(SRC_DIR)/input/SDLInput.cpp \
 $(SRC_DIR)/debug/MazeHistory.cpp \

@@ -19,6 +19,8 @@ public:
     TileType get(Position p) const;
     TileType& at(Position p);
 
+    void set(std::uint32_t x, std::uint32_t y, TileType type);
+
     bool inBounds(std::uint32_t x, std::uint32_t y) const;
 
     std::uint32_t width() const;

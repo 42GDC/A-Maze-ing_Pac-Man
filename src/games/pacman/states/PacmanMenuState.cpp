@@ -2,10 +2,13 @@
 #include "PacmanGameState.hpp"
 #include "engine/Engine.hpp"
 
-PacmanMenuState::PacmanMenuState(Engine& eng) : engine(eng) {}
+PacmanMenuState::PacmanMenuState(Engine& eng) : engine(eng) {
+    engine.getAudio().playMusic("menu", true);
+}
 
 void PacmanMenuState::handleInput(InputKey input) {
     if (input == InputKey::ENTER) {
+        engine.getAudio().stopMusic();
         engine.setState(std::make_unique<PacmanGameState>(engine));
     }
     else if (input == InputKey::ESCAPE || input == InputKey::QUIT) {

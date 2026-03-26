@@ -5,8 +5,8 @@
 #include "input/SDLInput.hpp"
 
 
-Engine::Engine(IRenderer& renderer)
-    : renderer(renderer) {}
+Engine::Engine(IRenderer& renderer, IAudio& audio)
+    : renderer(renderer), audio(audio) {}
 
 void Engine::setState(std::unique_ptr<IGameState> newState) {
     currentState = std::move(newState);
@@ -14,6 +14,10 @@ void Engine::setState(std::unique_ptr<IGameState> newState) {
 
 IRenderer& Engine::getRenderer() {
     return renderer;
+}
+
+IAudio& Engine::getAudio() {
+    return audio;
 }
 
 void Engine::run() {

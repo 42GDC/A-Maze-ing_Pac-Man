@@ -16,6 +16,11 @@ TileType Map::get(std::uint32_t x, std::uint32_t y) const
     return tiles[index(x, y)];
 }
 
+void Map::set(std::uint32_t x, std::uint32_t y, TileType type)
+{
+    tiles[index(x, y)] = type;
+}
+
 TileType& Map::at(std::uint32_t x, std::uint32_t y)
 {
     return tiles[index(x, y)];

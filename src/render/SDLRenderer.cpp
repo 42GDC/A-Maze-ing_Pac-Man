@@ -3,7 +3,7 @@
 #include <iostream>
 
 SDLRenderer::SDLRenderer()
-    : window(nullptr), renderer(nullptr), tileSize(32) {}
+    : window(nullptr), renderer(nullptr), tileSize(15) {}
 
 SDLRenderer::~SDLRenderer() {
     shutdown();
@@ -15,7 +15,7 @@ bool SDLRenderer::init() {
         return false;
     }
 
-    window = SDL_CreateWindow("Pacman", 800, 600, 0);
+    window = SDL_CreateWindow("Pacman", 1024, 1024, 0);
     if (!window) {
         std::cerr << "SDL_CreateWindow failed: " << SDL_GetError() << std::endl;
         return false;
@@ -42,8 +42,8 @@ void SDLRenderer::present() {
 
 void SDLRenderer::drawTile(int x, int y, char c) {
     SDL_FRect rect;
-    rect.x = x * tileSize;
-    rect.y = y * tileSize;
+    rect.x = x;
+    rect.y = y;
     rect.w = tileSize;
     rect.h = tileSize;
 
@@ -54,6 +54,10 @@ void SDLRenderer::drawTile(int x, int y, char c) {
             break;
 
         case '.': // pellet
+            rect.w = 8;
+            rect.h = 8;
+            rect.x += 4;
+            rect.y += 4;
             SDL_SetRenderDrawColor(renderer, 127, 0, 0, 255);
             break;
 
@@ -71,7 +75,8 @@ void SDLRenderer::drawTile(int x, int y, char c) {
 
 void SDLRenderer::drawText(const std::string& text) {
     // Temporary fallback (same behavior as terminal)
-    std::cout << text << std::endl;
+    // std::cout << text << std::endl;
+    (void)text; // Suppress unused parameter warning
 }
 
 void SDLRenderer::shutdown() {

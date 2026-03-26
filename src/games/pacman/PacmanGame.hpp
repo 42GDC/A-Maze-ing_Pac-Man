@@ -16,7 +16,11 @@ public:
     Map map;
 
     Vec2 playerPos{};
+    int playerDir = 2; // 0: right, 1: down, 2: left, 3: up
+    int playerNextDir = 2;
+    int playerSpeed = 2; // pixels per frame
     int score = 0;
+    int tileSize = 16;
 
     std::vector<PacmanEvent> events;
 
@@ -27,5 +31,5 @@ public:
     void render(IRenderer& renderer);
 
 private:
-    void movePlayer(int dx, int dy);
+    void movePlayer(void);
 };
