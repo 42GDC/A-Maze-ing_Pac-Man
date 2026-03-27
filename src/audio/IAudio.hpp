@@ -9,6 +9,6 @@ public:
 
     virtual void playEvent(PacmanEvent event) = 0;
 
-    virtual void playMusic(const std::string& path, bool loop) = 0;
+    virtual void playMusic(const std::string& path, int loops) = 0;
     virtual void stopMusic() = 0;
 };

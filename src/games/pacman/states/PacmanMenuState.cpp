@@ -3,7 +3,7 @@
 #include "engine/Engine.hpp"
 
 PacmanMenuState::PacmanMenuState(Engine& eng) : engine(eng) {
-    engine.getAudio().playMusic("menu", true);
+    engine.getAudio().playMusic("menu", -1);
 }
 
 void PacmanMenuState::handleInput(InputKey input) {

@@ -14,7 +14,7 @@ public:
     ~SDLAudio();
 
     void playEvent(PacmanEvent event) override;
-    void playMusic(const std::string& name, bool loop) override;
+    void playMusic(const std::string& name, int loops) override;
     void stopMusic() override;
 
     void setMasterSFXVolume(float vol);
@@ -33,8 +33,8 @@ private:
     MIX_Audio* gameMusicAudio = nullptr;
     MIX_Track* musicTrack     = nullptr;
 
-    float masterSFXVolume   = 0.5f;
-    float masterMusicVolume = 0.9f;
+    float masterSFXVolume   = 0.6f;
+    float masterMusicVolume = 0.2f;
 
     // relative volumes
     static constexpr float PELLET_VOLUME = 0.8f;

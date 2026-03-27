@@ -21,7 +21,7 @@ SDLAudio::SDLAudio() {
     }
 
     // Load SFX audio
-    pelletAudio = MIX_LoadAudio(mixer, "assets/sounds/sfx_movement_footsteps5.wav", true);
+    pelletAudio = MIX_LoadAudio(mixer, "assets/sounds/sfx_movement_ladder1a.wav", true);
     moveAudio   = MIX_LoadAudio(mixer, "assets/sounds/sfx_movement_jump1.wav", true);
 
     // Create persistent tracks
@@ -40,7 +40,7 @@ SDLAudio::SDLAudio() {
 
     // Load music as audio; we assign to track when playing
     menuMusicAudio = MIX_LoadAudio(mixer, "assets/music/title_screen.wav", false);
-    gameMusicAudio = MIX_LoadAudio(mixer, "assets/music/ending.wav", false);
+    gameMusicAudio = MIX_LoadAudio(mixer, "assets/music/level_01.wav", false);
 
     musicTrack = nullptr;
 }
@@ -108,7 +108,7 @@ void SDLAudio::playEvent(PacmanEvent event) {
             break;
 
         case PacmanEvent::GAME_STARTED:
-            playMusic("game", true);
+            playMusic("game", -1);
             break;
 
         default:
@@ -116,7 +116,7 @@ void SDLAudio::playEvent(PacmanEvent event) {
     }
 }
 
-void SDLAudio::playMusic(const std::string& name, bool loop) {
+void SDLAudio::playMusic(const std::string& name, int loops) {
     // Stop old music
     if (musicTrack) {
         MIX_StopTrack(musicTrack, 0);
@@ -136,8 +136,11 @@ void SDLAudio::playMusic(const std::string& name, bool loop) {
 
     MIX_SetTrackAudio(musicTrack, audio);
     MIX_SetTrackGain(musicTrack, masterMusicVolume);
-
-    MIX_PlayTrack(musicTrack, loop ? -1 : 0);
+    // MIX_PlayTrack(musicTrack, MIX_PROP_PLAY_LOOPS_NUMBER);
+    SDL_PropertiesID props = SDL_CreateProperties();
+    SDL_SetNumberProperty(props, MIX_PROP_PLAY_LOOPS_NUMBER, loops); // -1 = infinite looping
+    MIX_PlayTrack(musicTrack, props);
+    SDL_DestroyProperties(props);
 }
 
 void SDLAudio::stopMusic() {
