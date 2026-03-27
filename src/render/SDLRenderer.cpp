@@ -90,5 +90,5 @@ void SDLRenderer::shutdown() {
         window = nullptr;
     }
 
-    SDL_Quit();
+    // SDL_Quit(); quit SDL in audio for now
 }

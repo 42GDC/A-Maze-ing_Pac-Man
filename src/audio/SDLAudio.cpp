@@ -27,11 +27,13 @@ SDLAudio::SDLAudio() {
     // Create persistent tracks
     if (pelletAudio) {
         pelletTrack = MIX_CreateTrack(mixer);
+        std::cout << "Created pellet track: " << (pelletTrack ? "success" : "failure") << std::endl;
         MIX_SetTrackAudio(pelletTrack, pelletAudio);
         MIX_SetTrackGain(pelletTrack, PELLET_VOLUME * masterSFXVolume);
     }
     if (moveAudio) {
         moveTrack = MIX_CreateTrack(mixer);
+        std::cout << "Created move track: " << (moveTrack ? "success" : "failure") << std::endl;
         MIX_SetTrackAudio(moveTrack, moveAudio);
         MIX_SetTrackGain(moveTrack, MOVE_VOLUME * masterSFXVolume);
     }
@@ -43,27 +45,17 @@ SDLAudio::SDLAudio() {
     musicTrack = nullptr;
 }
 SDLAudio::~SDLAudio() {
-    std::cerr << "Destroying SDLAudio..." << std::endl;
-
     // First, stop all tracks via the mixer
     if (mixer) {
-        std::cerr << "debug stopping" << std::endl;
         MIX_StopAllTracks(mixer, 0); // stop everything
-        std::cerr << "debug stopped" << std::endl;
     }
-
-    std::cerr << "debug 0" << std::endl;
     // Now safe to destroy individual tracks
     if (pelletTrack) {
-        std::cerr << "debug 00" << std::endl;
         MIX_DestroyTrack(pelletTrack);
-        std::cerr << "debug 01" << std::endl;
         pelletTrack = nullptr;
     }
     if (moveTrack) {
-        std::cerr << "debug 10" << std::endl;
         MIX_DestroyTrack(moveTrack);
-        std::cerr << "debug 11" << std::endl;
         moveTrack = nullptr;
     }
     if (musicTrack) {
@@ -94,11 +86,10 @@ SDLAudio::~SDLAudio() {
         MIX_DestroyMixer(mixer);
         mixer = nullptr;
     }
-
     MIX_Quit();
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
 
-    std::cerr << "Destroyed SDLAudio.\n";
+    SDL_Quit();
 }
 
 void SDLAudio::playEvent(PacmanEvent event) {
