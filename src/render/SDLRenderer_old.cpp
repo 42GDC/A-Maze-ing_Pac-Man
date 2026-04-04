@@ -1,6 +1,5 @@
 #include "SDLRenderer.hpp"
 #include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
 #include <iostream>
 
 SDLRenderer::SDLRenderer()
@@ -8,24 +7,6 @@ SDLRenderer::SDLRenderer()
 
 SDLRenderer::~SDLRenderer() {
     shutdown();
-}
-
-bool SDLRenderer::loadTexture(const std::string& path, SDL_Texture*& outTexture) {
-    SDL_Surface* surface = IMG_Load(path.c_str());
-    if (!surface) {
-        std::cerr << "IMG_Load failed (" << path << "): " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    outTexture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_DestroySurface(surface);
-
-    if (!outTexture) {
-        std::cerr << "SDL_CreateTextureFromSurface failed (" << path << "): " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    return true;
 }
 
 bool SDLRenderer::init() {
@@ -46,21 +27,6 @@ bool SDLRenderer::init() {
         return false;
     }
 
-
-    // Load textures here (pelletTexture, etc.)
-    if (!loadTexture("assets/sprites/other/pellet.png", pelletTexture)) {
-        return false;
-    }
-    if (!loadTexture("assets/sprites/other/power_pellet.png", powerPelletTexture)) {
-        return false;
-    }
-    if (!loadTexture("assets/sprites/pacman/pacman_full.png", pacmanTexture)) {
-        return false;
-    }
-    if (!loadTexture("assets/sprites/walls/wall_full.png", wallTexture)) {
-        return false;
-    }
-
     return true;
 }
 
@@ -75,37 +41,36 @@ void SDLRenderer::present() {
 }
 
 void SDLRenderer::drawTile(int x, int y, char c) {
-    SDL_FRect dst;
-    dst.x = x;
-    dst.y = y;
-    dst.w = tileSize;
-    dst.h = tileSize;
-    SDL_Texture* texture = nullptr;
+    SDL_FRect rect;
+    rect.x = x;
+    rect.y = y;
+    rect.w = tileSize;
+    rect.h = tileSize;
 
     // Choose color based on tile
     switch (c) {
         case '#': // wall
-            texture = wallTexture;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
             break;
 
         case '.': // pellet
-            texture = pelletTexture;
-            break;
-
-        case 'o': // powerPellet
-            texture = powerPelletTexture;
+            rect.w = 8;
+            rect.h = 8;
+            rect.x += 4;
+            rect.y += 4;
+            SDL_SetRenderDrawColor(renderer, 127, 0, 0, 255);
             break;
 
         case 'P': // player
-            texture = pacmanTexture;
+            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
             break;
 
         default: // empty
-            texture = nullptr;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             break;
     }
 
-    SDL_RenderTexture(renderer, texture, nullptr, &dst);
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 void SDLRenderer::drawText(const std::string& text) {
@@ -125,9 +90,5 @@ void SDLRenderer::shutdown() {
         window = nullptr;
     }
 
-    if (pelletTexture) {
-        SDL_DestroyTexture(pelletTexture);
-        pelletTexture = nullptr;
-    }
-
+    // SDL_Quit(); quit SDL in audio for now
 }

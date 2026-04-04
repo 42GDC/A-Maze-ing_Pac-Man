@@ -41,5 +41,5 @@ private:
     static constexpr float MOVE_VOLUME   = 0.3f;
 
     std::chrono::steady_clock::time_point lastMoveSoundTime{};
-    const std::chrono::milliseconds moveSoundCooldown{100};
+    const std::chrono::milliseconds moveSoundCooldown{170};
 };

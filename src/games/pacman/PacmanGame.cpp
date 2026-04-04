@@ -95,10 +95,12 @@ void PacmanGame::render(IRenderer& renderer) {
             switch (map.get(x, y)) {
                 case TileType::Wall: c = '#'; break;
                 case TileType::Pellet: c = '.'; break;
+                case TileType::PowerPellet: c = 'o'; break;
                 default: break;
             }
             renderer.drawTile(x * tileSize, y * tileSize, c);
         }
     }
     renderer.drawTile(playerPos.x, playerPos.y, 'P');
+    // draw ghosts, tunnel...
 }
