@@ -15,6 +15,10 @@ InputKey SDLInput::pollInput() {
                 case SDLK_S: return InputKey::DOWN;
                 case SDLK_A: return InputKey::LEFT;
                 case SDLK_D: return InputKey::RIGHT;
+                case SDLK_UP: return InputKey::UP;
+                case SDLK_DOWN: return InputKey::DOWN;
+                case SDLK_LEFT: return InputKey::LEFT;
+                case SDLK_RIGHT: return InputKey::RIGHT;
 
                 case SDLK_RETURN: return InputKey::ENTER;
                 case SDLK_ESCAPE: return InputKey::ESCAPE;

@@ -53,10 +53,23 @@ void PacmanGame::movePlayer(void) {
             events.push_back(PacmanEvent::PELLET_EATEN);
             map.set(nx / tileSize, ny / tileSize, TileType::Empty);
         }
+        if (map.get(nx / tileSize, ny / tileSize) == TileType::PowerPellet && playerPos.x % tileSize == 0 && playerPos.y % tileSize == 0) {
+            score += 50;
+            events.push_back(PacmanEvent::POWER_PELLET_EATEN);
+            map.set(nx / tileSize, ny / tileSize, TileType::Empty);
+        }
         playerPos.x += dx;
         playerPos.y += dy;
         events.push_back(PacmanEvent::PLAYER_MOVED);
     }
+    if (playerPos.x < tileSize * 2)
+        playerPos.x = (map.width() - 3) * tileSize;
+    else if ((uint32_t)playerPos.x >= (map.width() - 3) * tileSize)
+        playerPos.x = tileSize * 2;
+    if (playerPos.y < tileSize * 2)
+        playerPos.y = (map.height() - 3) * tileSize;
+    else if ((uint32_t)playerPos.y >= (map.height() - 3) * tileSize)
+        playerPos.y = tileSize * 2;
 
     dx = 0;
     dy = 0;
@@ -88,19 +101,19 @@ void PacmanGame::update(double) {
 }
 
 void PacmanGame::render(IRenderer& renderer) {
+    static int frameCount = 0;
+    frameCount++;
+    uint8_t dir = 0;
     for (uint32_t y = 0; y < map.height(); y++) {
         for (uint32_t x = 0; x < map.width(); x++) {
-            char c = ' ';
-
-            switch (map.get(x, y)) {
-                case TileType::Wall: c = '#'; break;
-                case TileType::Pellet: c = '.'; break;
-                case TileType::PowerPellet: c = 'o'; break;
-                default: break;
+            dir = 0;
+            TileType tile = map.get(x, y);
+            if (tile == TileType::PowerPellet) {
+                dir = (frameCount / 16) % 2; // Alternate between two textures for animation
             }
-            renderer.drawTile(x * tileSize, y * tileSize, c);
+            renderer.drawTile(x * tileSize, y * tileSize, dir, tile);
         }
     }
-    renderer.drawTile(playerPos.x, playerPos.y, 'P');
+    renderer.drawTile(playerPos.x, playerPos.y, playerDir, TileType::Player);
     // draw ghosts, tunnel...
 }

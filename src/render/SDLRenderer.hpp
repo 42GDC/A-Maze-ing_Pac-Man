@@ -15,7 +15,7 @@ public:
 
     void clear() override;
     void present() override;
-    void drawTile(int x, int y, char c) override;
+    void drawTile(uint32_t x, uint32_t y, uint8_t dir, TileType tile) override;
     void drawText(const std::string& text) override;
 
 private:
@@ -25,8 +25,8 @@ private:
 
     bool loadTexture(const std::string& path, SDL_Texture*& outTexture);
     SDL_Texture* pelletTexture;
-    SDL_Texture* powerPelletTexture;
-    SDL_Texture* wallTexture;
+    SDL_Texture* powerPelletTexture[2];
+    SDL_Texture* wallTexture[12];
     SDL_Texture* pacmanTexture;
     // sprites and fonts would go here, but we don't have any yet
     // pacman 4 directions, 3 frames each = 12 sprites

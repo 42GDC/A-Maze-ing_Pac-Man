@@ -9,9 +9,27 @@ void TerminalRenderer::present(){
     std::cout.flush(); // Ensure all output is printed immediately
 }
 
-void TerminalRenderer::drawTile(int x, int y, char c) {
+void TerminalRenderer::drawTile(uint32_t x, uint32_t y, uint8_t dir, TileType tile) {
     // ANSI escape code: move cursor to (y+1, x+1) and print
-    std::cout << "\033[" << (y + 1) << ";" << (x + 1) << "H" << c; // Print the character twice for better visibility
+    (void)dir; // Suppress unused parameter warning
+    std::cout << "\033[" << (y + 1) << ";" << (x + 1) << "H";
+    switch (tile) {
+        case TileType::Wall:
+            std::cout << "#";
+            break;
+        case TileType::Pellet:
+            std::cout << ".";
+            break;
+        case TileType::PowerPellet:
+            std::cout << "o";
+            break;
+        case TileType::Player:
+            std::cout << "P";
+            break;
+        default:
+            std::cout << "?";
+            break;
+    }
 }
 
 

@@ -51,13 +51,19 @@ bool SDLRenderer::init() {
     if (!loadTexture("assets/sprites/other/pellet.png", pelletTexture)) {
         return false;
     }
-    if (!loadTexture("assets/sprites/other/power_pellet.png", powerPelletTexture)) {
+    if (!loadTexture("assets/sprites/other/power_pellet.png", powerPelletTexture[0])) {
+        return false;
+    }
+    if (!loadTexture("assets/sprites/other/power_pellet2.png", powerPelletTexture[1])) {
         return false;
     }
     if (!loadTexture("assets/sprites/pacman/pacman_full.png", pacmanTexture)) {
         return false;
     }
-    if (!loadTexture("assets/sprites/walls/wall_full.png", wallTexture)) {
+    if (!loadTexture("assets/sprites/walls/wall_empty.png", wallTexture[1])) { 
+        return false;
+    }
+    if (!loadTexture("assets/sprites/walls/wall_full.png", wallTexture[0])) {
         return false;
     }
 
@@ -74,29 +80,30 @@ void SDLRenderer::present() {
     SDL_RenderPresent(renderer);
 }
 
-void SDLRenderer::drawTile(int x, int y, char c) {
+void SDLRenderer::drawTile(uint32_t x, uint32_t y, uint8_t dir, TileType tile) {
     SDL_FRect dst;
     dst.x = x;
     dst.y = y;
     dst.w = tileSize;
     dst.h = tileSize;
+    (void)dir; // Suppress unused parameter warning
     SDL_Texture* texture = nullptr;
 
     // Choose color based on tile
-    switch (c) {
-        case '#': // wall
-            texture = wallTexture;
+    switch (tile) {
+        case TileType::Wall: // wall
+            texture = wallTexture[dir % 12];
             break;
 
-        case '.': // pellet
+        case TileType::Pellet: // pellet
             texture = pelletTexture;
             break;
 
-        case 'o': // powerPellet
-            texture = powerPelletTexture;
+        case TileType::PowerPellet: // powerPellet
+            texture = powerPelletTexture[dir & 1]; // Alternate between two textures for animation
             break;
 
-        case 'P': // player
+        case TileType::Player: // player
             texture = pacmanTexture;
             break;
 

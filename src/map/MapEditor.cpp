@@ -73,8 +73,8 @@ void MapEditor::buildFromPath(const std::string& path) {
                 case 'S':
                     setTile(x, y, TileType::PlayerSpawn);
                     break;
-                case 'B':
-                    setTile(x, y, TileType::BonusSpawn);
+                case 'F':
+                    setTile(x, y, TileType::BonusSpawn); //fruit spawn
                     break;
                 case 'g':
                     setTile(x, y, TileType::Empty);
@@ -82,11 +82,41 @@ void MapEditor::buildFromPath(const std::string& path) {
                 case 'G':
                     setTile(x, y, TileType::GhostSpawn);
                     break;
+                case 'C':
+                    setTile(x, y, TileType::ClydeSpawn);
+                    break;
+                case 'c':
+                    setTile(x, y, TileType::ClydeTarget);
+                    break;
+                case 'I':
+                    setTile(x, y, TileType::InkySpawn);
+                    break;
+                case 'i':
+                    setTile(x, y, TileType::InkyTarget);
+                    break;
+                case 'P':
+                    setTile(x, y, TileType::PinkySpawn);
+                    break;
+                case 'p':
+                    setTile(x, y, TileType::PinkyTarget);
+                    break;
+                case 'B':
+                    setTile(x, y, TileType::BlinkySpawn);
+                    break;
+                case 'b':
+                    setTile(x, y, TileType::BlinkyTarget);
+                    break;
                 case '-':
                     setTile(x, y, TileType::Door_EastWest);
                     break;
                 case '*':
                     setTile(x, y, TileType::Wall2);
+                    break;
+                case 'T':
+                    setTile(x, y, TileType::Tunnel);
+                    break;
+                case 't':
+                    setTile(x, y, TileType::Cover);
                     break;
                 default:
                     setTile(x, y, TileType::Wall);
