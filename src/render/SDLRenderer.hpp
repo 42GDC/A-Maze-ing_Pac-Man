@@ -28,6 +28,7 @@ private:
     SDL_Texture* powerPelletTexture[2];
     SDL_Texture* wallTexture[12];
     SDL_Texture* pacmanTexture;
+    SDL_Texture* pacmanTextures[4][4]; // 4 directions, 4 frames each
     // sprites and fonts would go here, but we don't have any yet
     // pacman 4 directions, 3 frames each = 12 sprites
     // 4 ghosts, 4 directions, 2 frames each = 32 sprites

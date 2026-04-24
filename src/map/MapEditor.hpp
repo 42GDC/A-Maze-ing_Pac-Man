@@ -11,6 +11,8 @@ public:
 
     void setTile(std::uint32_t x, std::uint32_t y, TileType type);
 
+    TileType getTile(std::uint32_t x, std::uint32_t y) const;
+
     void buildFromMaze(const Maze& maze);
 
     void buildFromPath(const std::string& path);

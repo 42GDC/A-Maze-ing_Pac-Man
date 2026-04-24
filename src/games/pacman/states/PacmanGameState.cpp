@@ -4,7 +4,7 @@
 #include "engine/Engine.hpp"
 
 PacmanGameState::PacmanGameState(Engine& eng) : engine(eng) {
-    game.init("assets/maps/map.txt");
+    game.init("assets/maps/map_test2.txt");
 }
 
 void PacmanGameState::handleInput(InputKey input) {

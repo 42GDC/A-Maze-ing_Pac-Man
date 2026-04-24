@@ -11,6 +11,11 @@ void MapEditor::setTile(std::uint32_t x, std::uint32_t y, TileType type)
     map.tiles[y * map.m_width + x] = type;
 }
 
+TileType MapEditor::getTile(std::uint32_t x, std::uint32_t y) const
+{
+    return map.tiles[y * map.m_width + x];
+}
+
 void MapEditor::buildFromMaze(const Maze& maze)
 {
     for (std::uint32_t y = 0U; y < map.m_height; y++)
@@ -125,4 +130,22 @@ void MapEditor::buildFromPath(const std::string& path) {
         }
         ++y;
     }
+    // resize tiles to 3 x 3 original size and center content
+    std::vector<TileType> oldTiles = map.tiles;
+    map.tiles.resize(map.width() * map.height() * 9, TileType::Empty);
+    uint16_t oldWidth = map.m_width;
+    uint16_t oldHeight = map.m_height;
+    map.m_height *= 3;
+    map.m_width *= 3;
+    for (std::uint32_t y = 0; y < map.height(); ++y) {
+        for (std::uint32_t x = 0; x < map.width(); ++x) {
+            setTile(x, y, TileType::Empty);
+        }
+    }
+    for (std::uint32_t y = 0; y < oldHeight; ++y) {
+        for (std::uint32_t x = 0; x < oldWidth; ++x) {
+            setTile(x + oldWidth, y + oldHeight, oldTiles[y * oldWidth + x]);
+        }
+    }
+
 }

@@ -16,6 +16,9 @@ public:
     Map map;
 
     Vec2 playerPos{};
+    Vec2 ghostPos[4]{};
+    Vec2 ghostTarget[4]{};
+    int ghostDir[4]{};
     int playerDir = 2; // 0: right, 1: down, 2: left, 3: up
     int playerNextDir = 2;
     int playerSpeed = 2; // pixels per frame

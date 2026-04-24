@@ -62,14 +62,15 @@ void PacmanGame::movePlayer(void) {
         playerPos.y += dy;
         events.push_back(PacmanEvent::PLAYER_MOVED);
     }
-    if (playerPos.x < tileSize * 2)
-        playerPos.x = (map.width() - 3) * tileSize;
-    else if ((uint32_t)playerPos.x >= (map.width() - 3) * tileSize)
-        playerPos.x = tileSize * 2;
-    if (playerPos.y < tileSize * 2)
-        playerPos.y = (map.height() - 3) * tileSize;
-    else if ((uint32_t)playerPos.y >= (map.height() - 3) * tileSize)
-        playerPos.y = tileSize * 2;
+    // teleport through tunnels
+    if ((uint32_t)playerPos.x < (map.width() / 3 * tileSize) + tileSize)
+        playerPos.x = ((2 * map.width() / 3) * tileSize) - tileSize * 2;
+    else if ((uint32_t)playerPos.x >= (((2 * map.width() / 3) * tileSize) - tileSize * 2))
+        playerPos.x = (map.width() / 3 * tileSize) + tileSize;
+    if ((uint32_t)playerPos.y < (map.height() / 3 * tileSize) + tileSize)
+        playerPos.y = ((2 * map.height() / 3) * tileSize) - tileSize * 2;
+    else if ((uint32_t)playerPos.y >= (((2 * map.height() / 3) * tileSize) - tileSize * 2))
+        playerPos.y = (map.height() / 3 * tileSize) + tileSize;
 
     dx = 0;
     dy = 0;
